@@ -8,7 +8,14 @@ class NewsApiTransform {
       content: news.content,
       image: getImageUrl(news.image),
       created_at: news.created_at,
-      user: news.user,
+      user: {
+        id: news?.user.id,
+        name: news?.user.name,
+        profile:
+          news?.user?.profile !== null
+            ? getImageUrl(news?.user?.profile)
+            : null,
+      },
     };
   }
 }
