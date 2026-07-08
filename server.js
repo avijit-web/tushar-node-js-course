@@ -2,6 +2,9 @@ import express from "express";
 import "dotenv/config";
 import ApiRoutes from "./routes/api.js";
 import fileUpload from "express-fileupload";
+import helmet from "helmet";
+import cors from "cors";
+import { limiter } from "./config/rateLimit.js";
 
 const app = express();
 
@@ -11,6 +14,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static("public"));
 app.use(fileUpload());
+app.use(helmet());
+app.use(cors());
+app.use(limiter);
 
 app.get("/", (req, res) => {
   return res.json({ message: "Hello its working..." });
