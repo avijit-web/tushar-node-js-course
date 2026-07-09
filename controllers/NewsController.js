@@ -9,6 +9,7 @@ import {
 import prisma from "../db/db.config.js";
 import NewsApiTransform from "../transform/newsApiTransform.js";
 import redisCache from "../config/redisconfig.js";
+import logger from "../config/logger.js";
 
 class NewsController {
   static async index(req, res) {
@@ -57,6 +58,8 @@ class NewsController {
         },
       });
     } catch (error) {
+      logger.error(error?.message);
+
       if (error instanceof errors.E_VALIDATION_ERROR) {
         return res.status(400).json({ errors: error.messages });
       } else {
@@ -120,6 +123,8 @@ class NewsController {
 
       res.status(200).json({ message: "News create successfully", news });
     } catch (error) {
+      logger.error(error?.message);
+
       if (error instanceof errors.E_VALIDATION_ERROR) {
         return res.status(400).json({ errors: error.messages });
       } else {
@@ -154,6 +159,8 @@ class NewsController {
 
       return res.json({ status: 200, news: transformNews });
     } catch (err) {
+      logger.error(err?.message);
+
       return res
         .status(500)
         .json({ message: "Something went wrong please try again" });
@@ -213,6 +220,8 @@ class NewsController {
 
       return res.status(200).json({ message: "news updated successfully" });
     } catch (err) {
+      logger.error(err?.message);
+
       return res
         .status(500)
         .json({ message: "Something went wrong please try again" });
@@ -250,6 +259,8 @@ class NewsController {
 
       return res.status(200).json({ message: "news deleted successfully" });
     } catch (err) {
+      logger.error(err?.message);
+
       console.log(err, "err");
       return res
         .status(500)
