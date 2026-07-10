@@ -11,6 +11,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { sendEmail } from "../config/mailer.js";
 import logger from "../config/logger.js";
+import { emailQueue, emailQueueName } from "../jobs/emailqueue.jobs.js";
 
 class AuthController {
   static async register(req, res) {
@@ -118,13 +119,17 @@ class AuthController {
     try {
       const { email } = req.query;
 
-      const payload = {
-        toEmail: email,
-        subject: "Just testing",
-        body: "<h1>Hello world , I am from master backend series</h1>",
-      };
+      const payload = [
+        {
+          toEmail: email,
+          subject: "Just testing",
+          body: "<h1>Hello world , I am from master backend series</h1>",
+        },
+      ];
 
-      await sendEmail(payload.toEmail, payload.subject, payload.body);
+      await emailQueue.add(emailQueueName, payload);
+
+      // await sendEmail(payload.toEmail, payload.subject, payload.body);
       return res.json({ status: 200, message: "Email sent successfully" });
     } catch (error) {
       logger.error({ type: "Email error", body: error });

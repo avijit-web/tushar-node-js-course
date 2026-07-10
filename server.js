@@ -27,4 +27,6 @@ app.use("/api", ApiRoutes);
 
 // logger
 
+import "./jobs/index.js";
+
 app.listen(PORT, () => console.log(`Server is running on PORT ${PORT}`));

@@ -7,7 +7,6 @@ export const emailQueueName = "email-queue";
 export const emailQueue = new Queue(emailQueueName, {
   connection: redisConnection,
   defaultJobOptions: {
-    delay: 5000,
     removeOnComplete: {
       count: 100,
       age: 60 * 60 * 24,
@@ -36,5 +35,6 @@ handler.on("completed", (job) => {
 });
 
 handler.on("failed", (job) => {
+  logger.error({ job: job.id, message: "Job failed" });
   console.log(`the job ${job.id} is failed`);
 });
